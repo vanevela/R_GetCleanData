@@ -42,5 +42,13 @@ cameraDataExcel <- read.xlsx("./data/cameras.xlsx",sheetIndex=1, header=TRUE)
 head(cameraDataExcel)
 
 ###Read XML files (Extensible markup language)
+#example: https://www.w3schools.com/xml/simple.xml
+library(RCurl)
+library(XML)
+XMLfileUrl<-getURL("https://www.w3schools.com/xml/simple.xml")
+doc<-xmlTreeParse(XMLfileUrl, useInternalNodes = TRUE)
+class(doc)
+rootNode<-xmlRoot(doc)
+xmlName(rootNode)
 
 
