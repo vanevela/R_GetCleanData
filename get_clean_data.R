@@ -50,5 +50,8 @@ doc<-xmlTreeParse(XMLfileUrl, useInternalNodes = TRUE)
 class(doc)
 rootNode<-xmlRoot(doc)
 xmlName(rootNode)
-
-
+names(rootNode)
+rootNode[[1]]
+rootNode[[1]][[1]]
+##programatically extract parts of the file
+xmlSApply(rootNode,xmlValue)
