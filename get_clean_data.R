@@ -42,16 +42,38 @@ cameraDataExcel <- read.xlsx("./data/cameras.xlsx",sheetIndex=1, header=TRUE)
 head(cameraDataExcel)
 
 ###Read XML files (Extensible markup language)
-#example: https://www.w3schools.com/xml/simple.xml
+#example, breakfast menu: https://www.w3schools.com/xml/simple.xml
 library(RCurl)
 library(XML)
 XMLfileUrl<-getURL("https://www.w3schools.com/xml/simple.xml")
 doc<-xmlTreeParse(XMLfileUrl, useInternalNodes = TRUE)
 class(doc)
+#save in object entire document 
 rootNode<-xmlRoot(doc)
+#to get the root node
 xmlName(rootNode)
 names(rootNode)
+#first element of root
 rootNode[[1]]
+#first component in first element the root
 rootNode[[1]][[1]]
 ##programatically extract parts of the file
-xmlSApply(rootNode,xmlValue)
+xmlSApply(rootNode,xmlValue) #xmlValue is a function
+##XPath 
+#more info: http://www.stat.berkeley.edu/~statcur/Workshop2/Presentations/XML.pdf
+#/node top level
+#//node any level
+#node[@attr-name] node with attribute name
+#node[@attr-name="bob"] node with attribute name attr-name='bob'
+
+##Get the items on the menu and prices
+xpathApply(rootNode,"//name",xmlValue)
+xpathApply(rootNode,"//price",xmlValue)
+#another example from espn web...no funciona la estructura de la pag cambio
+fileUrlespn<-"http://www.espn.com.co/futbol/partido?juegoId=487576"
+doc_espn<-htmlTreeParse(fileUrlespn,useInternalNodes = TRUE)
+teams<-xpathApply(doc_espn,"span[@class='long-name']",xmlValue)
+teams
+
+scores<-xpathApply(doc_espn,"a[@href='team-name']",xmlValue)
+scores
