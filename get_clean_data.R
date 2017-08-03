@@ -60,7 +60,7 @@ rootNode[[1]]
 #first component in first element the root
 rootNode[[1]][[1]]
 ##programatically extract parts of the file
-xmlSApply(rootNode,xmlValue) #xmlValue is a function
+xmlSApply(rootNode,xmlValue) # xmlValue is a function
 ##XPath 
 #more info: http://www.stat.berkeley.edu/~statcur/Workshop2/Presentations/XML.pdf
 #/node top level
@@ -102,4 +102,52 @@ cat(myjson)
 ##convert back to JSON to Dataframe
 iris2<-fromJSON(myjson)
 head(iris2)
+
+#####################################################
+####data.table###
+#create data tables just like data frames
+library(data.table)
+#data frame
+DF<- data.frame(x=rnorm(9),y=rep(c("a","b", "c,"),each=3),z=rnorm(9))
+head(DF,3)
+#data table
+DT<- data.table(x=rnorm(9),y=rep(c("a","b", "c,"),each=3),z=rnorm(9))
+head(DT,3)
+#see all the data tables in memory
+tables()
+#subsetting rows
+DT[2,]
+DT[DT$y=="a",]
+DT[c(2,3)]
+#subsetting columns
+DT[,c(2,3)]
+###Calculating values for variables with expressions
+DT[,list(mean(x),sum(z))]
+DT[,table(y)]
+###Adding new columns
+DT[,w:=z^2]
+DT
+##Multiple operations
+DT[,m:={tmp<-(x+z); log2(tmp+5)}]
+DT
+##plyr like operations
+DT[,a:=x>0]
+DT
+DT[,b:= mean(x+w), by=a]
+DT
+#special variables .N an integer, containing the number of times that a particular group appears
+set.seed(123);
+DT<-data.table(x=sample(letters[1:3], 1E5,TRUE))
+DT[,.N,by=x]
+#keys for grouping
+DT<- data.table(x=rep(c("a","b","c"),each=100),y=rnorm(300))
+setkey(DT,x)
+DT['a']
+##joins with keys
+DT1<- data.table(x=c("a","a","b","dt1"),y=1:4)
+DT2<- data.table(x=c("a","b","dt2"),z=5:7)
+setkey(DT1,x); setkey(DT2,x)
+merge(DT1,DT2)
+##Fast reading
+big_df<-data.frame
 
