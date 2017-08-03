@@ -19,7 +19,7 @@ list.files("./data")
 dateDownloaded<-date()
 dateDownloaded
 
-
+###############################################################
 ###Loading flat files - read.table()///read.csv() for csv files
 ##example Baltimore cameras 
 #tip quote="" means no quote, and resolve problems such as ` and "
@@ -27,7 +27,7 @@ dateDownloaded
 cameraData<-read.table("./data/cameras.csv", sep = ",",header = TRUE)
 head(cameraData)
 
-
+################################################################
 ###Excel files
 #download file
 excelfileUrl<-"https://data.baltimorecity.gov/api/views/dz54-2aru/rows.xlsx?accessType=DOWNLOAD"
@@ -41,8 +41,10 @@ library(xlsx)
 cameraDataExcel <- read.xlsx("./data/cameras.xlsx",sheetIndex=1, header=TRUE)
 head(cameraDataExcel)
 
+###############################################################
 ###Read XML files (Extensible markup language)
 #example, breakfast menu: https://www.w3schools.com/xml/simple.xml
+library(bitops)#for R version 3.4.1 before RCurl and XML libraries
 library(RCurl)
 library(XML)
 XMLfileUrl<-getURL("https://www.w3schools.com/xml/simple.xml")
@@ -69,11 +71,35 @@ xmlSApply(rootNode,xmlValue) #xmlValue is a function
 ##Get the items on the menu and prices
 xpathApply(rootNode,"//name",xmlValue)
 xpathApply(rootNode,"//price",xmlValue)
+#####warning#####
 #another example from espn web...no funciona la estructura de la pag cambio
 fileUrlespn<-"http://www.espn.com.co/futbol/partido?juegoId=487576"
 doc_espn<-htmlTreeParse(fileUrlespn,useInternalNodes = TRUE)
 teams<-xpathApply(doc_espn,"span[@class='long-name']",xmlValue)
 teams
 
-scores<-xpathApply(doc_espn,"a[@href='team-name']",xmlValue)
-scores
+####################################################################
+
+#################
+###Reading JSON##
+#################
+#reading data from JSON {jsonlite package}
+#example
+library(jsonlite)
+jsonData<-fromJSON("https://api.github.com/users/jtleek/repos")
+names(jsonData)
+
+##Nested objects in JSON
+#get acces to a particular varible (in this case owner is a Dframe inside another Dframe)
+names(jsonData$owner)
+#get acces to a variable inside owner Dframe
+jsonData$owner$login
+
+##writing data frames to JSON (iris is a dataframe from R library)
+myjson<-toJSON(iris,pretty = TRUE)
+cat(myjson)
+
+##convert back to JSON to Dataframe
+iris2<-fromJSON(myjson)
+head(iris2)
+
