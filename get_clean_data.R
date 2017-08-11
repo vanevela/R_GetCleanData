@@ -43,10 +43,12 @@ head(cameraDataExcel)
 
 ###############################################################
 ###Read XML files (Extensible markup language)
+
 #example, breakfast menu: https://www.w3schools.com/xml/simple.xml
 library(bitops)#for R version 3.4.1 before RCurl and XML libraries
 library(RCurl)
 library(XML)
+
 XMLfileUrl<-getURL("https://www.w3schools.com/xml/simple.xml")
 doc<-xmlTreeParse(XMLfileUrl, useInternalNodes = TRUE)
 class(doc)
@@ -61,6 +63,7 @@ rootNode[[1]]
 rootNode[[1]][[1]]
 ##programatically extract parts of the file
 xmlSApply(rootNode,xmlValue) # xmlValue is a function
+
 ##XPath 
 #more info: http://www.stat.berkeley.edu/~statcur/Workshop2/Presentations/XML.pdf
 #/node top level
@@ -71,11 +74,13 @@ xmlSApply(rootNode,xmlValue) # xmlValue is a function
 ##Get the items on the menu and prices
 xpathApply(rootNode,"//name",xmlValue)
 xpathApply(rootNode,"//price",xmlValue)
+
 #####warning#####
+
 #another example from espn web...no funciona la estructura de la pag cambio
 fileUrlespn<-"http://www.espn.com.co/futbol/partido?juegoId=487576"
-doc_espn<-htmlTreeParse(fileUrlespn,useInternalNodes = TRUE)
-teams<-xpathApply(doc_espn,"span[@class='long-name']",xmlValue)
+doc_espn <- htmlTreeParse(fileUrlespn,useInternalNodes = TRUE)
+teams <- xpathApply(doc_espn,"span[@class='long-name']",xmlValue)
 teams
 
 ####################################################################
