@@ -34,3 +34,32 @@ dbDisconnect(hg19)
 library(RCurl)
 con <- url("https://scholar.google.com/citations?user=HI-I6C0AAAAJ", method = "libcurl")
 htmlCode <- readLines(con)
+close(con)#always close de connection
+htmlCode
+
+#Parsing with XML 
+library(RCurl)
+library(XML)
+url <-"https://scholar.google.com/citations?user=HI-I6C0AAAAJ"
+html <-htmlTreeParse(url,useInternalNodes = TRUE)
+xpathSApply(html,"//title",xmlValue)
+xpathSApply(html,"//td[@id='citedby']",xmlValue)
+
+#GET fron the httrpackage (this method works fine, better than last one )
+
+library(httr)
+html2 <- GET(url)
+content2 <- content(html2, as= "text")
+parsedHtml <- htmlParse(content2,asText = TRUE)
+xpathSApply(parsedHtml,"//title", xmlValue)
+xpathSApply(parsedHtml,"//td[@id='citedby']",xmlValue)
+
+#Accessing websites with passwords
+pg2 <- GET("http://httpbin.org/basic-auth/user/passwd", authenticate("user","passwd"))
+pg2
+names(pg2)
+
+#Using handles
+google <- handle("http;//google.com")
+pg1 <- GET(handle = google, path = "/")
+pg2 <- GET(handle = google, path = "search")
