@@ -63,3 +63,11 @@ names(pg2)
 google <- handle("http;//google.com")
 pg1 <- GET(handle = google, path = "/")
 pg2 <- GET(handle = google, path = "search")
+
+#Readin From APIs (Aplication programming interfaces)
+
+##  the OAuth application -> oauth_app
+#   The OAuth framework doesn't match perfectly to use from R. 
+#   Each user of the package for a particular OAuth enabled site must create
+#   their own application. See the demos for instructions on 
+#   how to do this for linkedin, twitter, vimeo, facebook, github and google.
